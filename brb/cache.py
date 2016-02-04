@@ -25,3 +25,32 @@ if is_py2:
 elif is_py3:
     from functools import lru_cache
     cacher = lru_cache
+
+
+# Usage:
+#
+# def foo(bar, baz):
+#    print(bar)
+#    print(baz)
+#    return ', '.join([bar, baz])
+#
+# brb.cache(foo, baz="lo")
+
+cached_funcs = {}
+
+def _encoder(d):
+    return "&".join(["{}={}".format(k, v) for k, v in d.items()])
+
+def cache(user_func, maxsize=128, typed=False, **keywords):
+    key = _encoder(keywords)
+
+    if key not in cached_funcs:
+
+        def func(*args, **kwargs):
+            newkeywords = keywords.copy()
+            newkeywords.update(kwargs)
+            return user_func(*args, **newkeywords)
+
+        cached_funcs[key] = cacher(maxsize=maxsize, typed=typed)(func)
+
+    return cached_funcs[key]
