@@ -4,23 +4,24 @@ BRB: Be Right Back
 BRB is a python package that helps you cache your functions with customizability.
 
 
-# Install
+## Install
 
 ```
 pip install brb
 ```
 
-# Usage
+## Usage
 
 ```python
 import brb
 
-@brb.cacher(maxsize=128)
 def foo(bar, baz):
     print('bar={}, baz={}'.format(bar, baz))
     return ', '.join(bar, baz)
+    
+brb.cache(foo, maxsize=128)("Loo", "Foo")
 ```
 
-# LICENSE
+## LICENSE
 
 MIT
